@@ -1,0 +1,11 @@
+// the configured options and settings
+#ifndef _OPENJA_CONFIG_H_
+#define _OPENJA_CONFIG_H_
+#define VERSION_MAJOR @VERSION_MAJOR@
+#define VERSION_MINOR @VERSION_MINOR@
+#define VERSION_PATCH @VERSION_PATCH@
+
+#cmakedefine BUILD_CV
+
+#cmakedefine CV_CALIB_EXPORT
+#endif
