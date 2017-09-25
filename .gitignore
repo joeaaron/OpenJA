@@ -115,3 +115,9 @@ build/modules/cv/calib/Calib.dir/Debug/Calib.Build.CppClean.log
 build/modules/cv/calib/CMakeFiles/generate.stamp.depend
 build/modules/cv/calib/CMakeFiles/generate.stamp
 build/modules/cv/calib/ALL_BUILD.vcxproj.filters
+lib/TestCalib.lib
+lib/TestCalib.exp
+build/samples/TestCalib.dir/Debug/TestCalib.vcxprojResolveAssemblyReference.cache
+build/samples/TestCalib.dir/Debug/TestCalib.tlog/TestCalib.write.1u.tlog
+bin/debug/TestCalib.ilk
+bin/debug/TestCalib.exe

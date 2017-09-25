@@ -19,6 +19,9 @@ namespace JA{
 		{
 		public:
 			int RunCalibrateCamera(const std::string inputSettingsFile, const std::string outCameraDataFilePath, cv::Mat* prefCameraMatrix = NULL, cv::Mat* prefDistCoefficent = NULL);
+			int RunCalibrateLaser(const std::string inputCameraDataFile, const std::string inputImageListFile, std::string outputLaserCameraFile, const std::string outputBinFile);
+			int RunStereoCalib(const std::string inputCameraDataFile, const std::string inputSettingsFile, const std::string outStereoDataFilePath);
+			int RunHandEyesCalib(const std::string inputStereoDataFile, float inputRotationAngle, const std::string outputHandEyesFile);
 		private:
 			void sortConnerPoints(std::vector<cv::Point2f>& corners);
 		};
