@@ -2211,3 +2211,143 @@ CALIB_API int Calib::RunHandEyesCalib(const std::string inputStereoDataFile, flo
 
 	return 0;
 }
+
+////////////////////////////////Run Table Change//////////////////////////////////////////
+CALIB_API int Calib::RunTableChange(const std::string inputBinFile, const std::string inputHandEyesFile, const std::string inputLaserCameraFile, float offsetAngle_rad, char bRotate180, const std::string outputBinFile, char bCheckWorldCoordinate /* = 1 */)
+{
+	FILE* fp = fopen(inputBinFile.c_str(), "rb");
+	cv::Mat readTranformationMap(481, 641, CV_32FC3);
+	float* pDataReadTranformationMap = (float*)readTranformationMap.data;
+	if (isLittleEndian())
+	{
+		fread(pDataReadTranformationMap, 4, readTranformationMap.size().area() * 3, fp);
+	}
+	else
+	{
+		char tmpbuf[4];
+
+		for (int i = 0; i < readTranformationMap.size().area() * 3; i++, pDataReadTranformationMap++)
+		{
+			fread(tmpbuf, 1, 4, fp);
+			QUADBYTESSWAP(tmpbuf, (char*)pDataReadTranformationMap);
+		}
+	}
+	fclose(fp);
+
+	Mat H_lc, H_cw1;
+	//! [file_read]
+	FileStorage fs(inputHandEyesFile, FileStorage::READ); // Read the settings
+	if (!fs.isOpened())
+	{
+		cout << "Could not open the handeyes file: \"" << "out_handeyes_data.xml" << "\"" << endl;
+		return -1;
+	}
+	fs["CameraWorld"] >> H_cw1;
+
+	FileStorage fs2(inputLaserCameraFile, FileStorage::READ); // Read the settings
+	if (!fs2.isOpened())
+	{
+		cout << "Could not open the lasercameradata file: \"" << "out_laser_camera.xml" << "\"" << endl;
+		return -1;
+	}
+	fs2["LaserCamera"] >> H_lc;
+
+	Mat H_w1w2 = RotationMatrix(cv::Mat(cv::Vec3d(0, 0, 1)), offsetAngle_rad);
+	comMatR(H_w1w2, Mat::zeros(3, 1, CV_64FC1), H_w1w2);
+	comMatC(H_w1w2, (Mat_<double>(1, 4) << 0, 0, 0, 1), H_w1w2);
+
+	Mat H_w2w = RotationMatrix(cv::Mat(cv::Vec3d(1, 0, 0)), CV_PI);
+	comMatR(H_w2w, Mat::zeros(3, 1, CV_64FC1), H_w2w);
+	comMatC(H_w2w, (Mat_<double>(1, 4) << 0, 0, 0, 1), H_w2w);
+
+	// Mat H_lw = H_w2w * H_w1w2 * H_cw1 * H_lc; // bug, it seems in eye-hand calibration, word coordinate is the middle of rotation
+	Mat H_lw = H_w2w  * H_cw1 * H_lc;
+
+	// obtain transformation map
+	cv::Mat transformMaps(readTranformationMap.rows, readTranformationMap.cols, CV_32FC3);
+	for (int y = 0; y < readTranformationMap.rows; y++)
+	{
+		for (int x = 0; x < readTranformationMap.cols; x++)
+		{
+			//用二维数组初始化矩阵
+			double m[2][1] = { readTranformationMap.at<Vec3f>(y, x)[0], readTranformationMap.at<Vec3f>(y, x)[1] };
+			Mat M = Mat(2, 1, CV_64FC1, m);
+			Mat C = (Mat_<double>(2, 1) << 0, 1);
+			comMatC(M, C, M);
+
+			Mat P_w = H_lw * M; // Z point to the ground
+
+			if (bRotate180)
+				transformMaps.at<cv::Vec3f>(480 - y, 640 - x) = cv::Point3f((float)P_w.at<double>(0), (float)P_w.at<double>(1), (float)P_w.at<double>(2));
+			else
+				transformMaps.at<cv::Vec3f>(y, x) = cv::Point3f((float)P_w.at<double>(0), (float)P_w.at<double>(1), (float)P_w.at<double>(2));
+		}
+		transformMaps.at<cv::Point3f>(y, transformMaps.cols - 1) = transformMaps.at<cv::Point3f>(y, transformMaps.cols - 2);  
+	}
+
+	//cout << "OK" << endl;
+	for (int x = 0; x < transformMaps.cols; x++)
+	{
+		transformMaps.at<cv::Point3f>(transformMaps.rows - 1, x) = transformMaps.at<cv::Point3f>(transformMaps.rows - 2, x);
+	}
+
+	cv::Mat originalTransformationMap;
+	transformMaps.copyTo(originalTransformationMap);
+
+	for (int y = 0; y < originalTransformationMap.rows; y++)
+	{
+		for (int x = 0; x < originalTransformationMap.cols; x++)
+		{
+			if (originalTransformationMap.at<cv::Vec3f>(y, x)[1] < -100) // y should > -100
+			{
+				transformMaps.at<cv::Vec3f>(y, x) = cv::Vec3f(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+			}
+		}
+	}
+
+	// save transformaton map; // in little-endian mode
+	FILE* fps = fopen(outputBinFile.c_str(), "wb");
+	float* pDataTransformationMaps = (float*)transformMaps.data;
+	int lWriteSize = 0;
+	if (isLittleEndian())
+	{
+		lWriteSize = fwrite((void*)pDataTransformationMaps, 4, transformMaps.size().area() * 3, fps);
+	}
+	else // host is big Endian, transform it to little Endian when write to bin file
+	{
+		char tmpbuf[4];
+		for (int i = 0; i < transformMaps.size().area() * 3; i++, pDataTransformationMaps++)
+		{
+			QUADBYTESSWAP((char*)pDataTransformationMaps, tmpbuf);
+			fwrite(tmpbuf, 1, 4, fps);
+		}
+	}
+	fclose(fps);
+
+	/* store all transformation matrix */
+	FileStorage fsSave("out_HMatrixs.xml", FileStorage::WRITE); // Read the settings
+	if (!fsSave.isOpened())
+	{
+		cout << "Could not open the laserdata file: \"" << "out_handeyes_data.xml" << "\"" << endl;
+		return -1;
+	}
+	cv::Mat H_cw = H_lw * H_lc.inv();
+	cv::Mat H_wc = H_cw.inv();
+	fsSave << "H_lc" << H_lc << "H_cw1" << H_cw1 << "H_lw" << H_lw << "H_cw" << H_cw << "H_wc" << H_wc;
+	fsSave.release();
+
+	std::cout << "H_lw is :" << H_lw << std::endl;
+	cv::Mat R_lw;
+	cv::Rodrigues(H_lw(cv::Rect(0, 0, 3, 3)), R_lw);
+	cv::Mat T_lw = H_lw(cv::Rect(3, 0, 1, 3));
+	std::cout << "R_lw is : " << R_lw << std::endl << "T_lw is : " << T_lw << std::endl;
+
+	if (bCheckWorldCoordinate && (cv::norm(R_lw, cv::NORM_L2) > 0.2))
+	{
+		std::cout << "ERROR: world coordinate's Z is not point to the heaven!!!!" << std::endl;
+		CV_Assert(false);
+		return -1;
+	}
+
+	return 0;
+}
