@@ -7,8 +7,8 @@
 ########################################################
 cmake_minimum_required (VERSION 2.6) 
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
-link_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
+link_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/SeqCapture")
 link_directories("${CMAKE_CURRENT_SOURCE_DIR}/SeqCapture")
@@ -51,7 +51,7 @@ set_target_properties(TestCalib
 #Test File
 add_executable(TestFile testFile.cpp )
 target_link_libraries(TestFile 
-					 File                     #Use the lib
+					 fileFunction                     #Use the lib
 					 ${EXTRA_LIBS}
 					)
 set_target_properties(TestFile 

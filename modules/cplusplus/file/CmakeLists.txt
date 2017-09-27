@@ -1,4 +1,4 @@
-project(File)
+project(fileFunction)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
