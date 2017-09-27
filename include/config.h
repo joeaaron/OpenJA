@@ -6,6 +6,8 @@
 #define VERSION_PATCH 0
 
 #define BUILD_CV
+#define BUILD_CPLUSPLUS
 
 #define CV_CALIB_EXPORT
+#define CPLUSPLUS_FILE_EXPORT
 #endif

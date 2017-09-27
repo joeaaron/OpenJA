@@ -23,6 +23,7 @@ AUX_SOURCE_DIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/SeqCapture" SeqCaptureSRC)
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 source_group("Include" FILES ${CURRENT_HEADERS})
 
+#Test Calib
 add_executable(TestCalib testCalib.cpp )
 target_link_libraries(TestCalib 
 					 Calib                     #Use the lib
@@ -45,4 +46,20 @@ set_target_properties(TestCalib
 					ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 					LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 					RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
+#Test File
+add_executable(TestFile testFile.cpp )
+target_link_libraries(TestFile 
+					 File                     #Use the lib
+					 ${EXTRA_LIBS}
+					)
+set_target_properties(TestFile 
+				    PROPERTIES 
+					ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/debug"
+					ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release"
 )

@@ -176,3 +176,5 @@ build/modules/cplusplus/file/File.dir/Debug/File.tlog/link.write.1.tlog
 build/modules/cplusplus/file/File.dir/Debug/File.tlog/link.read.1.tlog
 build/modules/cplusplus/file/File.dir/Debug/File.tlog/link.command.1.tlog
 build/modules/cplusplus/file/File.dir/Debug/File.tlog/CL.read.1.tlog
+build/modules/cplusplus/file/CMakeFiles/generate.stamp
+build/modules/cplusplus/CMakeFiles/generate.stamp

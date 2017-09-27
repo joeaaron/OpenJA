@@ -6,6 +6,8 @@
 #define VERSION_PATCH @VERSION_PATCH@
 
 #cmakedefine BUILD_CV
+#cmakedefine BUILD_CPLUSPLUS
 
 #cmakedefine CV_CALIB_EXPORT
+#cmakedefine CPLUSPLUS_FILE_EXPORT
 #endif

@@ -22,9 +22,13 @@ link_directories("${PROJECT_SOURCE_DIR}/lib")
 # select library or target to build 
 option(BUILD_CV			"Build Computer Vision" 	ON)
 option (BUILD_EXAMPLES  "Build Test Demo" 	ON)
+option (BUILD_CPLUSPLUS  "Build C PlusPlus" 	ON)
 cmake_dependent_option(CV_CALIB_EXPORT	"build shared calib library"	OFF
 					   "BUILD_CV" ON)	
 
+cmake_dependent_option(CPLUSPLUS_FILE_EXPORT	"build shared file library"	OFF
+					   "BUILD_CPLUSPLUS" ON)	
+					   
 if(BUILD_CV)
 	add_subdirectory(modules/cv)
 endif(BUILD_CV)
@@ -32,4 +36,8 @@ endif(BUILD_CV)
 if(BUILD_EXAMPLES)
 	add_subdirectory(samples)
 endif(BUILD_EXAMPLES)
+
+if(BUILD_CPLUSPLUS)
+	add_subdirectory(modules/cplusplus)
+endif(BUILD_CPLUSPLUS)
 
