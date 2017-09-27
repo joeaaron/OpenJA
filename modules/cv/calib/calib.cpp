@@ -2351,3 +2351,59 @@ CALIB_API int Calib::RunTableChange(const std::string inputBinFile, const std::s
 
 	return 0;
 }
+
+////////////////////////////////Get Deviation Para//////////////////////////////////////////
+const double imgArea = 640 * 480;
+
+cv::Point2f drawCircle(cv::Mat image, cv::Point2f p1, cv::Point2f p2, cv::Point2f& centerPoint)
+{
+	centerPoint.x = (p1.x + p2.x) / 2;
+	centerPoint.y = (p1.y + p2.y) / 2;
+
+	cv::circle(image, centerPoint, 2, cv::Scalar(0, 0, 255));
+	return centerPoint;
+}
+
+CALIB_API std::vector<double> Calib::GetDeviationPara(cv::Mat img, vector<double>& para)
+{
+	Settings s;
+	s.boardSize.width = 13;
+	s.boardSize.height = 9;
+
+	//if (s.flipVertical)	flip(img, img, 0);
+	vector<Point2f> corner;
+	int chessBoardFlags = CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE;
+	bool isFind;
+
+	isFind = findChessboardCorners(img, s.boardSize, corner, chessBoardFlags);
+	if (isFind)
+	{
+		Mat viewGray;
+		cvtColor(img, viewGray, COLOR_BGR2GRAY);
+		cornerSubPix(viewGray, corner, Size(11, 11),
+			Size(-1, -1), TermCriteria(TermCriteria::EPS + TermCriteria::COUNT, 30, 0.1));
+	}
+
+	cv::Point2f p1, p2;
+	p1.x = p1.y = 0;
+	p2.x = img.cols;
+	p2.y = img.rows;
+
+	cv::Point2f boardCenter;
+	cv::Point2f imageCenter;
+
+	drawCircle(img, corner[0], corner[s.boardSize.width * s.boardSize.height - 1], boardCenter);
+	drawCircle(img, p1, p2, imageCenter);
+
+	double lrDeviation = boardCenter.x - imageCenter.x;
+	double udDeviation = boardCenter.y - imageCenter.y;
+	double boardArea = (corner[s.boardSize.width * s.boardSize.height - 1].x - corner[0].x) * (corner[s.boardSize.width * s.boardSize.height - 1].y - corner[0].y);
+	double areaDeviation = imgArea - boardArea;     //Ç°ºó
+
+	para.push_back(lrDeviation);
+	para.push_back(udDeviation);
+	para.push_back(areaDeviation);
+
+	corner.clear();
+	return para;
+}
