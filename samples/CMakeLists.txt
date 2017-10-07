@@ -48,6 +48,31 @@ set_target_properties(TestCalib
 					RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
+#Test Laser
+add_executable(TestLaser testLaser.cpp )
+target_link_libraries(TestLaser 
+					 Laser                     #Use the lib
+					 ${EXTRA_LIBS}
+					)
+set_target_properties(TestLaser 
+				    PROPERTIES 
+					ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/debug"
+					ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release"
+)
+
+#Use the Opencv module
+target_link_libraries(TestLaser ${OpenCV_LIBS})
+set_target_properties(TestLaser
+					PROPERTIES
+					ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
 #Test File
 add_executable(TestFile testFile.cpp )
 target_link_libraries(TestFile 

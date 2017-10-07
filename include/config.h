@@ -8,6 +8,7 @@
 #define BUILD_CV
 #define BUILD_CPLUSPLUS
 
-#define CV_CALIB_EXPORT
-#define CPLUSPLUS_FILE_EXPORT
+/* #undef CV_CALIB_EXPORT */
+#define CV_LASER_EXPORT
+/* #undef CPLUSPLUS_FILE_EXPORT */
 #endif

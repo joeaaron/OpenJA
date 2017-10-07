@@ -28,6 +28,10 @@ cmake_dependent_option(CV_CALIB_EXPORT	"build shared calib library"	OFF
 
 cmake_dependent_option(CPLUSPLUS_FILE_EXPORT	"build shared file library"	OFF
 					   "BUILD_CPLUSPLUS" ON)	
+
+cmake_dependent_option(CV_LASER_EXPORT	"build shared laser library"	OFF
+					   "BUILD_CV" ON)	
+
 					   
 if(BUILD_CV)
 	add_subdirectory(modules/cv)
