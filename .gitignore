@@ -310,3 +310,9 @@ bin/debug/TestLaser.pdb
 bin/debug/TestLaser.ilk
 bin/debug/TestLaser.exe
 bin/debug/Laser.dll
+lib/Calib.exp
+bin/debug/fileFunction.ilk
+bin/debug/Calib.pdb
+bin/debug/Calib.ilk
+bin/debug/fileFunction.pdb
+build/modules/cplusplus/file/fileFunction.dir/Debug/fileFunction.Build.CppClean.log
