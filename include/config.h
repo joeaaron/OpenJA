@@ -10,5 +10,5 @@
 
 #define CV_CALIB_EXPORT
 /* #undef CV_LASER_EXPORT */
-/* #undef CPLUSPLUS_FILE_EXPORT */
+#define CPLUSPLUS_FILE_EXPORT
 #endif

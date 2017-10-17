@@ -310,6 +310,7 @@ bin/debug/TestLaser.pdb
 bin/debug/TestLaser.ilk
 bin/debug/TestLaser.exe
 bin/debug/Laser.dll
+<<<<<<< HEAD
 build/samples/calibfile/images/top/4/transformationTable.bin
 build/samples/calibfile/images/top/4/stereo_calib.xml
 build/samples/calibfile/images/top/4/out_stereo_data.xml
@@ -610,3 +611,11 @@ build/samples/calibfile/images/top/1/config.xml
 build/samples/calibfile/images/top/1/_VID5.xml
 build/samples/calibfile/images/top/1/VID5.xml
 build/samples/calibfile/images/top/1/RawTransformationTable.bin
+=======
+lib/Calib.exp
+bin/debug/fileFunction.ilk
+bin/debug/Calib.pdb
+bin/debug/Calib.ilk
+bin/debug/fileFunction.pdb
+build/modules/cplusplus/file/fileFunction.dir/Debug/fileFunction.Build.CppClean.log
+>>>>>>> origin/PT-DEV
