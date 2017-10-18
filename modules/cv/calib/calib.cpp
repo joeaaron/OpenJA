@@ -460,8 +460,8 @@ CALIB_API int Calib::RunCalibrateCamera(const string inputSettingsFile, const st
 		//! [output_undistorted]
 		//-------------------------- Show image and check for input commands -------------------
 		//! [await_input]
-		imshow("Image View", view);
-		char key = (char)waitKey(s.inputCapture.isOpened() ? 10 : s.delay);
+		//imshow("Image View", view);
+		char key = (char)waitKey(s.inputCapture.isOpened() ? 5 : s.delay);
 
 		if (key == ESC_KEY)
 			break;
@@ -511,8 +511,11 @@ CALIB_API int Calib::RunCalibrateCamera(const string inputSettingsFile, const st
 				continue;
 			remap(view, rview, map1, map2, INTER_LINEAR);
 			remap(view, rview2, map1_2, map2_2, INTER_LINEAR, BORDER_CONSTANT);
+			//debug mode
+			#if 0
 			imshow("Image Un-distort View (optimal camera matrix)", rview);
 			imshow("Image Un-distort View (fix camera matrix)", rview2);
+			#endif
 
 			char key = (char)waitKey(s.inputCapture.isOpened() ? 10 : s.delay);
 			/*char c = (char)waitKey();
@@ -1087,8 +1090,11 @@ cv::Vec2f findLines(cv::Mat& img, std::vector<cv::Point> points, int i)
 		- 1000 * line[0], line[3] - 1000 * line[1]), cv::Point(line[2] + 1000 * line[0], line[3] + 1000 * line[1]), cv::Scalar(0, 0, 255));
 	//drawLine(img, phi, rho, cv::Scalar(0, 0, 255));
 	std::stringstream lineNum;
+	//debug mode
+#if 0
 	lineNum << "Fine Line Results" << i;
 	cv::imshow(lineNum.str(), results);
+#endif
 
 	return cv::Vec2f(rho, phi);
 }
@@ -1412,8 +1418,11 @@ void lineBoardFit(void* data)
 	std::stringstream ss;
 	ss << "line fit with board " << index;
 
+	//debug mode
+	#if 1
 	cv::imshow(ss.str(), findPointsResults);
 	cv::waitKey(100);
+	#endif
 	//nextLaserFrame = true;
 }
 #define UNDISTORT_FAILED_THRES 0.1
@@ -1871,13 +1880,13 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 			*/
 			cornerSubPix(grayImageL, cornerL, Size(5, 5), Size(-1, -1), TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 20, 0.1));
 			drawChessboardCorners(rgbImageL, s.boardSize, cornerL, isFindL);
-			imshow("chessboardL", rgbImageL);
+			//imshow("chessboardL", rgbImageL);
 			imagePointL.push_back(cornerL);
 
 
 			cornerSubPix(grayImageR, cornerR, Size(5, 5), Size(-1, -1), TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 20, 0.1));
 			drawChessboardCorners(rgbImageR, s.boardSize, cornerR, isFindR);
-			imshow("chessboardR", rgbImageR);
+			//imshow("chessboardR", rgbImageR);
 			imagePointR.push_back(cornerR);
 
 			goodFrameCount++;
@@ -1918,13 +1927,13 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 	cvtColor(grayImageL, rectifyImageL, CV_GRAY2BGR);
 	cvtColor(grayImageR, rectifyImageR, CV_GRAY2BGR);
 
-	imshow("Rectify Before", rectifyImageL);
+	//imshow("Rectify Before", rectifyImageL);
 
 	remap(rectifyImageL, rectifyImageL, mapLx, mapLy, INTER_LINEAR);
 	remap(rectifyImageR, rectifyImageR, mapRx, mapRy, INTER_LINEAR);
 
-	imshow("ImageL", rectifyImageL);
-	imshow("ImageR", rectifyImageR);
+	//imshow("ImageL", rectifyImageL);
+	//imshow("ImageR", rectifyImageR);
 
 	outputCameraParam(s);
 
@@ -1951,7 +1960,7 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 	for (int i = 0; i < canvas.rows; i += 16)
 		line(canvas, Point(0, i), Point(canvas.cols, i), Scalar(0, 255, 0), 1, 8);
 
-	imshow("rectified", canvas);
+	//imshow("rectified", canvas);
 	imagePointL.clear();
 	imagePointR.clear();
 	objRealPoint.clear();
