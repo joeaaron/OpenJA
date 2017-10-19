@@ -619,3 +619,18 @@ bin/debug/Calib.ilk
 bin/debug/fileFunction.pdb
 build/modules/cplusplus/file/fileFunction.dir/Debug/fileFunction.Build.CppClean.log
 >>>>>>> origin/PT-DEV
+build/samples/images/cowa_cam_config/unaligned/transformationTableBottom4.bin
+build/samples/images/cowa_cam_config/unaligned/transformationTableBottom2.bin
+build/samples/images/cowa_cam_config/unaligned/transformationTableBottom1.bin
+build/samples/images/cowa_cam_config/unaligned/transformationTable4.bin
+build/samples/images/cowa_cam_config/unaligned/transformationTable2.bin
+build/samples/images/cowa_cam_config/aligned/transformationTableBottom4.bin
+build/samples/images/cowa_cam_config/aligned/transformationTableBottom2.bin
+build/samples/images/cowa_cam_config/aligned/transformationTableBottom1.bin
+build/samples/images/cowa_cam_config/aligned/transformationTable4.bin
+build/samples/images/cowa_cam_config/transformationTableBottom4.bin
+build/samples/images/cowa_cam_config/transformationTableBottom2.bin
+build/samples/images/cowa_cam_config/transformationTableBottom1.bin
+build/samples/images/cowa_cam_config/transformationTable4.bin
+build/samples/images/cowa_cam_config/transformationTable2.bin
+build/samples/images/cowa_cam_config/aligned/transformationTable2.bin

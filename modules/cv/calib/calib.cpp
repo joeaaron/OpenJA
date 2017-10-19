@@ -1283,12 +1283,13 @@ void onMouseCallback(int event, int x, int y, int flags, void* userdata)
 	}
 
 }
-void lineBoardFit(void* data)
+
+void lineBoardFit(void* data, bool& bFitness)
 {
 	int index = *((int *)data);
 	cv::Mat image = imgListUndistort[index];
 	//cv::Mat image = imread("x2.bmp", cv::IMREAD_GRAYSCALE);
-	cv::threshold(image, image, 120, 255, cv::THRESH_BINARY);
+	cv::threshold(image, image, 100, 255, cv::THRESH_BINARY);
 
 	std::vector<cv::Point> points = getPoints(image, 255);
 	cv::Vec2f lLaserLine = findLines(image, points, index);
@@ -1300,6 +1301,14 @@ void lineBoardFit(void* data)
 	cv::line(findPointsResults, cv::Point2f(0, lLaserLineRho / sin(lLaserLineTheta)),
 		cv::Point2f(10000, (lLaserLineRho - 10000 * cos(lLaserLineTheta)) / sin(lLaserLineTheta)), Scalar(0, 0, 255));
 
+	float k = ((lLaserLineRho - 10000 * cos(lLaserLineTheta)) / sin(lLaserLineTheta) - lLaserLineRho / sin(lLaserLineTheta)) / 10000;
+	double laserAngle = atan(abs(k)) / CV_PI * 180;
+	//std::cout << laserAngle;
+	if (laserAngle > 20)
+	{
+		bFitness = false;
+		return;
+	}
 
 	cv::Mat lPoints = imagesPoints.row(index);
 	// 遍历棋盘格内角点，找到激光线与棋盘格竖直线的交点
@@ -1418,6 +1427,7 @@ void lineBoardFit(void* data)
 	std::stringstream ss;
 	ss << "line fit with board " << index;
 
+	bFitness = true;
 	//debug mode
 	#if 1
 	cv::imshow(ss.str(), findPointsResults);
@@ -1703,8 +1713,21 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 	{
 		nextLaserFrame = false;
 		std::cout << "Processing img " << i << std::endl;
-		lineBoardFit(&i);
+		bool fit = true;
+		lineBoardFit(&i, fit);
+		if (!fit)
+		{
+			int pos = 120;
+			cv::imshow("Threshold Results", imgListUndistort[i]);
+			cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
+			onThresholdChanged(220, &i);
+			cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
 
+			while (!nextLaserFrame)
+			{
+				cv::waitKey(10);
+			}
+		}
 #if 0
 		int pos = 120;
 		cv::imshow("Threshold Results", imgListUndistort[i]);
