@@ -1289,7 +1289,7 @@ void lineBoardFit(void* data, bool& bFitness)
 	int index = *((int *)data);
 	cv::Mat image = imgListUndistort[index];
 	//cv::Mat image = imread("x2.bmp", cv::IMREAD_GRAYSCALE);
-	cv::threshold(image, image, 100, 255, cv::THRESH_BINARY);
+	cv::threshold(image, image, 120, 255, cv::THRESH_BINARY);
 
 	std::vector<cv::Point> points = getPoints(image, 255);
 	cv::Vec2f lLaserLine = findLines(image, points, index);
