@@ -2439,3 +2439,19 @@ CALIB_API std::vector<double> Calib::GetDeviationPara(cv::Mat img, vector<double
 	corner.clear();
 	return para;
 }
+
+CALIB_API bool Calib::FindBoardCorner(cv::Mat img, bool& bFindCorner)
+{
+	Settings s;
+	s.boardSize.width = 13;
+	s.boardSize.height = 9;
+
+	vector<Point2f> corner;
+	int chessBoardFlags = CALIB_CB_ADAPTIVE_THRESH | CALIB_CB_NORMALIZE_IMAGE;
+
+	bFindCorner = findChessboardCorners(img, s.boardSize, corner, chessBoardFlags);
+	if (bFindCorner)
+		return true;
+	else
+		return false;
+}
