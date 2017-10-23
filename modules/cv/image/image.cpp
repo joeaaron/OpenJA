@@ -15,9 +15,10 @@ IMAGE_API bool Image::ImgAvgGrayValue(cv::Mat img, bool& result)
 	cv::Mat convr, Mean;
 	meanStdDev(rowImg, Mean, convr);
 
-	double grayValue = Mean.at<double>(0, 0);
+	double grayMeanValue = Mean.at<double>(0, 0);
+	double grayConvrValue = convr.at<double>(0, 0);
 
-	if (grayValue > grayThreshold)
+	if (grayMeanValue > grayThreshold)
 	{
 		result = true;
 		return result;
