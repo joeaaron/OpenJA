@@ -11,4 +11,5 @@
 #define CV_CALIB_EXPORT
 #define CV_LASER_EXPORT
 #define CPLUSPLUS_FILE_EXPORT
+#define CV_IMAGE_EXPORT
 #endif

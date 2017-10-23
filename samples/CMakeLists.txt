@@ -84,3 +84,28 @@ set_target_properties(TestFile
 					RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/debug"
 					RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release"
 )
+
+#Test Image
+add_executable(TestImg testImg.cpp )
+target_link_libraries(TestImg 
+					 Image                     #Use the lib
+					 ${EXTRA_LIBS}
+					)
+set_target_properties(TestImg 
+				    PROPERTIES 
+					ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/debug"
+					ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release"
+)
+
+#Use the Opencv module
+target_link_libraries(TestImg ${OpenCV_LIBS})
+set_target_properties(TestImg
+					PROPERTIES
+					ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+					LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+					RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)

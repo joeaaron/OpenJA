@@ -11,4 +11,5 @@
 #cmakedefine CV_CALIB_EXPORT
 #cmakedefine CV_LASER_EXPORT
 #cmakedefine CPLUSPLUS_FILE_EXPORT
+#cmakedefine CV_IMAGE_EXPORT
 #endif
