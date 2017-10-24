@@ -3,14 +3,14 @@
 
 using namespace JA::CV;
 
-const double grayThreshold = 50;
 
 IMAGE_API bool Image::ImgAvgGrayValue(cv::Mat img, bool& result)
 {
-	cv::Mat grayImg; 
-	cvtColor(img, grayImg, cv::COLOR_BGR2GRAY);
+	if (1 != img.channels())
+		cvtColor(img, img, cv::COLOR_BGR2GRAY);
+	const double grayThreshold = 30;
 
-	cv::Mat roiImg = grayImg.clone();
+	cv::Mat roiImg = img.clone();
 	cv::Mat rowImg = roiImg.reshape(0, 1);
 	cv::Mat convr, Mean;
 	meanStdDev(rowImg, Mean, convr);
