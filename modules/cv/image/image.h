@@ -18,7 +18,7 @@ namespace JA{
 		class IMAGE_API Image
 		{
 		public:
-			static bool ImgAvgGrayValue(cv::Mat img, bool& result);
+			static bool ImgAvgGrayValue(cv::Mat img, double& meanValue, bool& result);
 		};
 	}
 }

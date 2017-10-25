@@ -1714,21 +1714,21 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 		nextLaserFrame = false;
 		std::cout << "Processing img " << i << std::endl;
 		bool fit = true;
-		lineBoardFit(&i, fit);
-		if (!fit)
-		{
-			int pos = 120;
-			cv::imshow("Threshold Results", imgListUndistort[i]);
-			cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
-			onThresholdChanged(220, &i);
-			cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
+		//lineBoardFit(&i, fit);
+		//if (!fit)
+		//{
+		//	int pos = 120;
+		//	cv::imshow("Threshold Results", imgListUndistort[i]);
+		//	cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
+		//	onThresholdChanged(220, &i);
+		//	cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
 
-			while (!nextLaserFrame)
-			{
-				cv::waitKey(10);
-			}
-		}
-#if 0
+		//	while (!nextLaserFrame)
+		//	{
+		//		cv::waitKey(10);
+		//	}
+		//}
+#if 1
 		int pos = 120;
 		cv::imshow("Threshold Results", imgListUndistort[i]);
 		cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
