@@ -679,3 +679,9 @@ bin/debug/TestImg.pdb
 bin/debug/TestImg.ilk
 bin/debug/TestImg.exe
 bin/debug/Image.pdb
+build/samples/TestImg.dir/Debug/TestImg.Build.CppClean.log
+build/samples/Debug/TestFile.lib
+build/samples/Debug/TestFile.exp
+build/modules/cv/laser/Laser.dir/Debug/Laser.Build.CppClean.log
+bin/debug/Laser.pdb
+bin/debug/Laser.ilk

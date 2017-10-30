@@ -27,7 +27,7 @@ int main()
 
 	const char* dstPath = "D:\\calibFiles\\cowa_R1";
 
-	for (int i = 8; i <= 8; i++)
+	for (int i = 1; i <= 8; i++)
 	{
 		if (3 == i || 7 == i)
 			continue;

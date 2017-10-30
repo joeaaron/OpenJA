@@ -17,6 +17,8 @@
 # define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#define DISPLAY 0
+#define DEBUGMODE 1
 
 using namespace cv;
 using namespace std;
@@ -512,7 +514,7 @@ CALIB_API int Calib::RunCalibrateCamera(const string inputSettingsFile, const st
 			remap(view, rview, map1, map2, INTER_LINEAR);
 			remap(view, rview2, map1_2, map2_2, INTER_LINEAR, BORDER_CONSTANT);
 			//debug mode
-			#if 0
+			#if DISPLAY
 			imshow("Image Un-distort View (optimal camera matrix)", rview);
 			imshow("Image Un-distort View (fix camera matrix)", rview2);
 			#endif
@@ -1018,8 +1020,11 @@ cv::Vec2f findLines(cv::Mat& img, cv::Point startPoint, cv::Point endPoint)
 	cv::fitLine(lPoints, line, cv::DIST_L2, 0, 0.01, 0.01);
 
 	cv::line(results, cv::Point(line[2] - 1000 * line[0], line[3] - 1000 * line[1]), cv::Point(line[2] + 1000 * line[0], line[3] + 1000 * line[1]), cv::Scalar(0, 0, 255));
+
+#if DEBUGMODE
 	cv::imshow("Find Line Results", results);
 	cv::waitKey(10);
+#endif
 
 	double lResultTheta;
 	if (abs(line[0]) < 0.00001)
@@ -1091,7 +1096,7 @@ cv::Vec2f findLines(cv::Mat& img, std::vector<cv::Point> points, int i)
 	//drawLine(img, phi, rho, cv::Scalar(0, 0, 255));
 	std::stringstream lineNum;
 	//debug mode
-#if 0
+#if DISPLAY
 	lineNum << "Fine Line Results" << i;
 	cv::imshow(lineNum.str(), results);
 #endif
@@ -1304,7 +1309,7 @@ void lineBoardFit(void* data, bool& bFitness)
 	float k = ((lLaserLineRho - 10000 * cos(lLaserLineTheta)) / sin(lLaserLineTheta) - lLaserLineRho / sin(lLaserLineTheta)) / 10000;
 	double laserAngle = atan(abs(k)) / CV_PI * 180;
 	//std::cout << laserAngle;
-	if (laserAngle > 20)
+	if (laserAngle > 20)     //need to fix in tha later
 	{
 		bFitness = false;
 		return;
@@ -1429,10 +1434,10 @@ void lineBoardFit(void* data, bool& bFitness)
 
 	bFitness = true;
 	//debug mode
-	#if 1
+#if DEBUGMODE
 	cv::imshow(ss.str(), findPointsResults);
 	cv::waitKey(100);
-	#endif
+#endif
 	//nextLaserFrame = true;
 }
 #define UNDISTORT_FAILED_THRES 0.1
@@ -1714,21 +1719,8 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 		nextLaserFrame = false;
 		std::cout << "Processing img " << i << std::endl;
 		bool fit = true;
-		//lineBoardFit(&i, fit);
-		//if (!fit)
-		//{
-		//	int pos = 120;
-		//	cv::imshow("Threshold Results", imgListUndistort[i]);
-		//	cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
-		//	onThresholdChanged(220, &i);
-		//	cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
-
-		//	while (!nextLaserFrame)
-		//	{
-		//		cv::waitKey(10);
-		//	}
-		//}
-#if 1
+		// DEBUG
+#if DEBUGMODE
 		int pos = 120;
 		cv::imshow("Threshold Results", imgListUndistort[i]);
 		cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
@@ -1738,9 +1730,25 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 		while (!nextLaserFrame)
 		{
 			cv::waitKey(10);
+		} 
+
+#else
+		lineBoardFit(&i, fit);
+		if (!fit)
+		{
+			int pos = 120;
+			cv::imshow("Threshold Results", imgListUndistort[i]);
+			cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
+			onThresholdChanged(220, &i);
+			cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
+
+			while (!nextLaserFrame)
+			{
+				cv::waitKey(10);
+			}
 		}
 #endif
-
+		
 
 	}
 
