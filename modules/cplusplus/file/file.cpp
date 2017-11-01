@@ -1,6 +1,9 @@
 #include "file.h"
 #include <direct.h>
 #include <io.h>
+#include <tchar.h>
+#include <stdio.h>
+
 #define MAX_PATH 1024                         // 定义最大路径长度
 #define BUF_SIZE 256
 
@@ -84,4 +87,49 @@ FILE_API int File::copyDir(const char* pSrc, const char* pDes)
 		return 1;
 	}
 	return -3;
+}
+
+//************************************
+// Method:    countDirNum
+// FullName:  JA::CPLUSPLUS::File::countDirNum
+// Access:    public static 
+// Returns:   FILE_API int
+// Qualifier:
+// Parameter: const char * pSrc
+// Parameter: int & dirNum
+//************************************
+FILE_API int File::countDirNum(const char* pSrc, int& dirNum)
+{
+	char dir[MAX_PATH] = { 0 };
+	char *str = "\\*.*";
+
+	strcpy(dir, pSrc);
+	strcat(dir, str);
+
+	//首先查找dir中符合要求的文件
+	long hFile;
+	_finddata_t fileinfo;
+	if ((hFile = _findfirst(dir, &fileinfo)) != -1)
+	{
+		do
+		{
+			//检查是不是目录
+			//如果不是目录,则进行处理文件夹下面的文件
+			if (!(fileinfo.attrib & _A_SUBDIR))
+			{
+				continue;
+			}
+			else//处理目录，递归调用
+			{
+				if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
+				{
+					dirNum++;
+				}
+			}
+		} while (_findnext(hFile, &fileinfo) == 0);
+		_findclose(hFile);
+		return 1;
+	}
+
+	return dirNum;
 }

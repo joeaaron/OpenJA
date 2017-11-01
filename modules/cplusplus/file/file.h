@@ -19,6 +19,7 @@ namespace JA{
 		{
 		public:
 			static int copyDir(const char* pSrc, const char* pDes);
+			static int countDirNum(const char* pSrc, int& dirNum);
 		private:
 			static int copyFile(const char * pSrc, const char *pDes);
 		};

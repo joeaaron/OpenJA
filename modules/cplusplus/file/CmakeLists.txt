@@ -2,7 +2,7 @@ project(fileFunction)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-include_directories("${CMAKE_BINARY_DIR}/include")
+include_directories("${CMAKE_SOURCE_DIR}/include")
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
