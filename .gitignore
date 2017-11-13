@@ -685,3 +685,4 @@ build/samples/Debug/TestFile.exp
 build/modules/cv/laser/Laser.dir/Debug/Laser.Build.CppClean.log
 bin/debug/Laser.pdb
 bin/debug/Laser.ilk
+build/modules/cv/laser/Laser.vcxproj.user

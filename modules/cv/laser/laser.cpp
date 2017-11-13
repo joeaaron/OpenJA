@@ -60,7 +60,7 @@ LASER_API bool Laser::LaserWidthDetect(cv::Mat img, bool& result, std::vector<cv
 	///judge the width
 	for (std::vector<int>::iterator laserWidth = laserWidths.begin(); laserWidth != laserWidths.end(); ++laserWidth)
 	{
-		if (abs(*laserWidth - 1) > STANDARD_WIDTH)
+		if (abs(*laserWidth - STANDARD_WIDTH) > 2)
 		{
 			result = false;
 			break;
@@ -101,7 +101,7 @@ LASER_API bool Laser::LaserLengthDetect(std::vector<cv::Point> points, bool& res
 	double laserLength = sqrt(laserLengthSquare);
 
 	///judge the length
-	if (abs(laserLength - 10) > STANDARD_LENGTH)
+	if (abs(laserLength - STANDARD_LENGTH) > 10)
 		result = false;
 	else
 		result = true;

@@ -19,6 +19,7 @@ namespace JA{
 		{
 		public:
 			static bool ImgAvgGrayValue(cv::Mat img, double& meanValue, bool& result);
+			static bool GetHash(cv::Mat src1, cv::Mat src2, bool& result);
 		};
 	}
 }
