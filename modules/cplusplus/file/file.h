@@ -24,6 +24,7 @@ namespace JA{
 			static void getAllFiles(string pSrcPath, vector<string>& files);
 			static void getAllFormatFiles(string path, vector<string>& files, string format);
 			static void delAllFormatFiles(string path);
+			static void delAllFiles(string path);
 		private:
 			static int copyFile(const char * pSrc, const char *pDes);
 			

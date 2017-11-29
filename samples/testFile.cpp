@@ -32,6 +32,6 @@ int main()
 		std::cout << files[i] << endl;
 	}
 	ofn.close();*/
-	File::delAllFormatFiles(filePath);
+	File::delAllFiles(filePath);
 	return 0;
 }

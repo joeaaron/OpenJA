@@ -216,6 +216,48 @@ FILE_API void File::delAllFormatFiles(string path)
 	return;
 }
 
+FILE_API void File::delAllFiles(string path)
+{
+	long hFile = 0;
+	struct _finddata_t fileInfo;
+	string pathName, exdName;
+	// \\* 代表要遍历所有的类型
+	if ((hFile = _findfirst(pathName.assign(path).append("\\*").c_str(), &fileInfo)) == -1) {
+		cout << "error no file!" << endl;
+		return;
+	}
+	do
+	{
+		//判断文件的属性是文件夹还是文件
+		cout << fileInfo.name << (fileInfo.attrib&_A_SUBDIR ? "[folder]" : "[file]") << endl;
+		//如果是文件夹就进入文件夹，迭代
+		if (fileInfo.attrib&_A_SUBDIR) {
+			{//遍历文件系统时忽略"."和".."文件
+				if (strcmp(fileInfo.name, ".") != 0 && strcmp(fileInfo.name, "..") != 0) {
+					string tmp;
+					tmp = path + "\\" + fileInfo.name;
+					delAllFiles(tmp);
+				}
+			}
+
+		}
+		else {
+			//delete file
+			if (strcmp(fileInfo.name, ".") != 0 && strcmp(fileInfo.name, "..") != 0) {
+			
+				string delpath = path + "\\" + fileInfo.name;
+				if (remove(delpath.c_str()) != 0)			//删除失败就报错
+					perror("Error deleting file");
+				else {
+					cout << fileInfo.name << "deleted" << endl;
+				}
+			
+			}
+		}
+	} while (_findnext(hFile, &fileInfo) == 0);
+	_findclose(hFile);
+	return;
+}
 //************************************
 // Method:    getAllFormatFiles
 // FullName:  JA::CPLUSPLUS::File::getAllFormatFiles
