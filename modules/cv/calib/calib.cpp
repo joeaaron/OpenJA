@@ -18,7 +18,7 @@
 #endif
 
 #define DISPLAY 0
-#define DEBUGMODE 1
+#define DEBUGMODE 0
 
 using namespace cv;
 using namespace std;
@@ -288,7 +288,7 @@ static void onMouseClick(int event, int x, int y, int flags, void* userdata)
 
 CALIB_API int Calib::RunCalibrateCamera(const string inputSettingsFile, const string outCameraDataFilePath, cv::Mat* prefCameraMatrix, cv::Mat* prefDistCoefficent)
 {
-	help();
+	//help();
 
 	//! [file_read]
 	Settings s;
@@ -633,7 +633,7 @@ static bool runCalibration(Settings& s, Size& imageSize, Mat& cameraMatrix, Mat&
 	std::ofstream fs_out_distort_data("out_distortion_data.txt");
 	fs_out_distort_data << "original distortion is :" << distCoeffs << std::endl;
 	fs_out_distort_data << "original  camera matrix is :" << cameraMatrix << std::endl;
-	std::cout << "original distortion is :" << distCoeffs << std::endl;
+	//std::cout << "original distortion is :" << distCoeffs << std::endl;
 
 	// add by wq, fix K2 and K3 and re-calibrate
 	if (0)
@@ -671,7 +671,7 @@ static bool runCalibration(Settings& s, Size& imageSize, Mat& cameraMatrix, Mat&
 
 	fs_out_distort_data.close();
 
-	std::cout << "Re-projection error reported by calibrateCamera: " << rms << endl;
+	//std::cout << "Re-projection error reported by calibrateCamera: " << rms << endl;
 
 	bool ok = checkRange(cameraMatrix) && checkRange(distCoeffs);
 
@@ -791,7 +791,7 @@ static bool runCalibrationAndSave(Settings& s, Size imageSize, Mat& cameraMatrix
 	{
 		prefCameraMatrix->copyTo(cameraMatrix);
 		prefDistCoefficent->copyTo(distCoeffs);
-		std::cout << "use reference camera matrix and distcoeffs: " << cameraMatrix << distCoeffs << std::endl;
+		//std::cout << "use reference camera matrix and distcoeffs: " << cameraMatrix << distCoeffs << std::endl;
 	}
 
 	if (ok)
@@ -836,7 +836,7 @@ cv::Mat getRotationMatix(cv::Mat originVec, cv::Mat expectedVec)
 
 	double BP = cv::norm(rotationMatrix*normedOri - normedExp);
 
-	std::cout << "BP error of getTransformationMatrix of two vector is: " << BP << std::endl;
+	//std::cout << "BP error of getTransformationMatrix of two vector is: " << BP << std::endl;
 	return rotationMatrix;
 }
 Mat comMatC(Mat Matrix1, Mat Matrix2, Mat &MatrixCom)
@@ -1418,7 +1418,7 @@ void lineBoardFit(void* data, bool& bFitness)
 				lPoint_CameraCoord.y = lPointMat_CameraCoord.at<double>(1);
 				lPoint_CameraCoord.z = lPointMat_CameraCoord.at<double>(2);
 
-				std::cout << x << ": " << lPoint_CameraCoord.x << ", " << lPoint_CameraCoord.y << ", " << lPoint_CameraCoord.z << std::endl;
+				//std::cout << x << ": " << lPoint_CameraCoord.x << ", " << lPoint_CameraCoord.y << ", " << lPoint_CameraCoord.z << std::endl;
 
 				laserPoints_CameraCoord3d.at<double>(validLaserPointCount, 0) = lPoint_CameraCoord.x;
 				laserPoints_CameraCoord3d.at<double>(validLaserPointCount, 1) = lPoint_CameraCoord.y;
@@ -1503,7 +1503,7 @@ void getAndSaveTransformation(cv::Mat LaserPlane, std::string outputLaserCameraF
 	double p5 = fy * r5;
 	double p6 = fy * ty;
 
-	std::cout << "Laser Point in Camera Coordinate and in Laser Coordinate" << std::endl;
+	//std::cout << "Laser Point in Camera Coordinate and in Laser Coordinate" << std::endl;
 	double BPError = 0;
 	for (int i = 0; i < validLaserPointCount; i++)
 	{
@@ -1532,14 +1532,14 @@ void getAndSaveTransformation(cv::Mat LaserPlane, std::string outputLaserCameraF
 		cv::Mat lPoint_BPCamCoordMat = R * lPoint_LaserCoordMat + T;
 		cv::Point3d lPoint_BPCamCoord(lPoint_BPCamCoordMat.at<double>(0), lPoint_BPCamCoordMat.at<double>(1), lPoint_BPCamCoordMat.at<double>(2));
 
-		std::cout << "CAM3d: " << lPoint_CamCoord.x << ", " << lPoint_CamCoord.y << ", " << lPoint_CamCoord.z <<
+		/*std::cout << "CAM3d: " << lPoint_CamCoord.x << ", " << lPoint_CamCoord.y << ", " << lPoint_CamCoord.z <<
 			"  LASER3D: " << X_w << ", " << Y_w << ", " << 0 << std::endl <<
 			"BPC3D: " << lPoint_BPCamCoord.x << ", " << lPoint_BPCamCoord.y << ", " << lPoint_BPCamCoord.z << std::endl;
-
+		*/
 		BPError += cv::norm(lPoint_BPCamCoord - lPoint_CamCoord);
 	}
 	BPError = BPError / validLaserPointCount;
-	std::cout << "BP error of Laser Coord to Camera Coord is: " << BPError << std::endl;
+	//std::cout << "BP error of Laser Coord to Camera Coord is: " << BPError << std::endl;
 
 	// obtain transformation map
 	cv::Mat transformMap(imgList[0].rows + 1, imgList[0].cols + 1, CV_32FC2);
@@ -1674,7 +1674,7 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 		}
 	}
 	undistortImagePointsError = undistortImagePointsError / (distortImagesPoints.cols * distortImagesPoints.rows);
-	std::cout << "Undistort ImagePoints Error is: " << undistortImagePointsError << std::endl;
+	//std::cout << "Undistort ImagePoints Error is: " << undistortImagePointsError << std::endl;
 
 	initUndistortRectifyMap(cameraMatrix, distcofficients, cv::Mat::eye(3, 3, CV_64FC1), cameraMatrix, cv::Size(640, 480), CV_32FC1, undistorMapX, undistorMapY);
 
@@ -1717,7 +1717,7 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 	for (int i = 0; i < nFrame; i++)
 	{
 		nextLaserFrame = false;
-		std::cout << "Processing img " << i << std::endl;
+		//std::cout << "Processing img " << i << std::endl;
 		bool fit = true;
 		// DEBUG
 #if DEBUGMODE
@@ -1737,7 +1737,7 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 		if (!fit)
 		{
 			int pos = 120;
-			cv::imshow("Threshold Results", imgListUndistort[i]);
+			//cv::imshow("Threshold Results", imgListUndistort[i]);
 			cv::createTrackbar("threshold trackbar", "Threshold Results", &pos, 255, onThresholdChanged, &i);
 			onThresholdChanged(220, &i);
 			cv::setMouseCallback("Threshold Results", onMouseCallback, &i);
@@ -1765,8 +1765,8 @@ CALIB_API int Calib::RunCalibrateLaser(const string inputCameraDataFile, const s
 	}
 	BPError = BPError / (validLaserPointCount);
 
-	std::cout << "Back Projection Error is: " << BPError << std::endl;
-	std::cout << "laser plane (in camera coordinate) is : " << sol.at<double>(0) << ", " << sol.at<double>(1) << ", " << sol.at<double>(2) << "   " << 200 << std::endl;
+	//std::cout << "Back Projection Error is: " << BPError << std::endl;
+	//std::cout << "laser plane (in camera coordinate) is : " << sol.at<double>(0) << ", " << sol.at<double>(1) << ", " << sol.at<double>(2) << "   " << 200 << std::endl;
 
 	cv::Mat oriLaserPlane(4, 1, CV_64FC1);
 	oriLaserPlane.at<double>(0) = sol.at<double>(0);
@@ -1819,7 +1819,7 @@ void outputCameraParam(Settings& s)
 	{
 		fsSave << "cameraMatrixL" << cameraMatrixL << "cameraDistcoeffL" << distCoeffL << "cameraMatrixR" << cameraMatrixR << "cameraDistcoeffR" << distCoeffR;
 		fsSave << "R" << R << "T" << T << "Rl" << Rl << "Rr" << Rr << "Pl" << Pl << "Pr" << Pr << "Q" << Q;
-		cout << "R=" << R << endl << "T=" << T << endl << "Rl=" << Rl << endl << "Rr=" << Rr << endl << "Pl=" << Pl << endl << "Pr=" << Pr << endl << "Q=" << Q << endl;
+		//cout << "R=" << R << endl << "T=" << T << endl << "Rl=" << Rl << endl << "Rr=" << Rr << endl << "Pl=" << Pl << endl << "Pr=" << Pr << endl << "Q=" << Q << endl;
 		fsSave.release();
 	}
 	else
@@ -1921,7 +1921,7 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 			imagePointR.push_back(cornerR);
 
 			goodFrameCount++;
-			cout << "The image is good" << endl;
+			//cout << "The image is good" << endl;
 		}
 		else
 		{
@@ -1936,7 +1936,7 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 
 	//计算实际的校正点的三维坐标,根据实际标定格子的大小来设置
 	calRealPoint(objRealPoint, s);
-	cout << "cal real successful" << endl;
+	//cout << "cal real successful" << endl;
 
 	//标定摄像头由于左右摄像机分别都经过了单目标定,所以在此处选择flag = CALIB_USE_INTRINSIC_GUESS
 	double rms = stereoCalibrate(objRealPoint, imagePointL, imagePointR,
@@ -1946,7 +1946,7 @@ CALIB_API int Calib::RunStereoCalib(const std::string inputCameraDataFile, const
 		CALIB_FIX_INTRINSIC,
 		TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, 1e-5));
 
-	cout << "Stereo Calibration done with RMS error = " << rms << endl;
+	//cout << "Stereo Calibration done with RMS error = " << rms << endl;
 
 	stereoRectify(cameraMatrixL, distCoeffL, cameraMatrixR, distCoeffR, imageSize, R, T, Rl, Rr, Pl, Pr, Q,
 		CALIB_ZERO_DISPARITY, -1, imageSize, &validROIL, &validROIR);
@@ -2233,7 +2233,7 @@ CALIB_API int Calib::RunHandEyesCalib(const std::string inputStereoDataFile, flo
 	Mat Hcg1(4, 4, CV_64FC1);
 	Tsai_HandEye(Hcg1, Hgij, Hcij);
 
-	cout << Hcg1 << endl;
+	//cout << Hcg1 << endl;
 
 	//! [file_write]
 	FileStorage fs_(outputHandEyesFile, FileStorage::WRITE);
@@ -2376,11 +2376,11 @@ CALIB_API int Calib::RunTableChange(const std::string inputBinFile, const std::s
 	fsSave << "H_lc" << H_lc << "H_cw1" << H_cw1 << "H_lw" << H_lw << "H_cw" << H_cw << "H_wc" << H_wc;
 	fsSave.release();
 
-	std::cout << "H_lw is :" << H_lw << std::endl;
+	//std::cout << "H_lw is :" << H_lw << std::endl;
 	cv::Mat R_lw;
 	cv::Rodrigues(H_lw(cv::Rect(0, 0, 3, 3)), R_lw);
 	cv::Mat T_lw = H_lw(cv::Rect(3, 0, 1, 3));
-	std::cout << "R_lw is : " << R_lw << std::endl << "T_lw is : " << T_lw << std::endl;
+	std::cout << "H_lw is :" << H_lw << "R_lw is : " << R_lw << std::endl << "T_lw is : " << T_lw << std::endl;
 
 	if (bCheckWorldCoordinate && (cv::norm(R_lw, cv::NORM_L2) > 0.2))
 	{
