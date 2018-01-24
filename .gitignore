@@ -814,3 +814,4 @@ build/samples/TestFile.dir/Release/TestFile.Build.CppClean.log
 build/modules/cv/laser/Laser.dir/Release/Laser.Build.CppClean.log
 build/modules/cv/image/Image.dir/Release/Image.Build.CppClean.log
 build/modules/cplusplus/file/fileFunction.dir/Release/fileFunction.Build.CppClean.log
+build/modules/cv/calib/Calib.vcxproj.user
