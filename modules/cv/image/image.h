@@ -20,6 +20,10 @@ namespace JA{
 		public:
 			static bool ImgAvgGrayValue(cv::Mat img, double& meanValue, bool& result);
 			static bool GetHash(cv::Mat src1, cv::Mat src2, bool& result);
+			static float GetSterringAngle(const string inputCameraDataFile, float& angle);
+		private:
+			static void calcBoardCornerPositions(float squareSize, vector<cv::Point3f>& corners);
+			static float rotationMatrixToEulerAngles(cv::Mat& R, float& angle);
 		};
 	}
 }
