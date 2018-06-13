@@ -17,7 +17,7 @@
 # define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#define DISPLAY 0
+#define DISPLAY 1
 #define DEBUGMODE 0
 
 using namespace cv;
@@ -1434,7 +1434,7 @@ void lineBoardFit(void* data, bool& bFitness)
 
 	bFitness = true;
 	//debug mode
-#if DEBUGMODE
+#if DISPLAY
 	cv::imshow(ss.str(), findPointsResults);
 	cv::waitKey(100);
 #endif
